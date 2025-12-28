@@ -5,350 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do App with Reminders</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .notification-banner {
+            background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px;
+            margin-bottom: 20px; display: none; align-items: center; gap: 10px;
         }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
+        .notification-banner.show { display: flex; }
+        .notification-banner button {
+            background: #856404; color: white; border: none; padding: 8px 15px;
+            border-radius: 5px; cursor: pointer; font-weight: 600;
         }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .notification-prompt {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .notification-prompt.show {
-            display: flex;
-        }
-
-        .notification-prompt button {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            background: #667eea;
-            color: white;
-        }
-
         .add-task-form {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
+            background: white; padding: 25px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-        }
-
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; }
         .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 14px; transition: border-color 0.3s;
         }
-
         .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
+            outline: none; border-color: #667eea;
         }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
+        .form-group textarea { resize: vertical; min-height: 60px; }
         .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 12px 30px; border: none; border-radius: 8px; font-size: 16px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 100%;
+            color: white; width: 100%;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #6c757d; color: white; margin-left: 10px; }
         .tasks-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
+            background: white; padding: 25px; border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .filter-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
+        .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .filter-tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: #f0f0f0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+            flex: 1; padding: 10px; border: none; background: #f0f0f0;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s;
         }
-
         .filter-tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-
         .task-item {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
+            padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;
+            margin-bottom: 15px; transition: all 0.3s;
         }
-
-        .task-item:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .task-item.completed {
-            opacity: 0.6;
-            background: #f9f9f9;
-        }
-
-        .task-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .task-checkbox {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .task-title {
-            flex: 1;
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .task-title.completed {
-            text-decoration: line-through;
-        }
-
-        .task-actions {
-            display: flex;
-            gap: 10px;
-        }
-
+        .task-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .task-item.completed { opacity: 0.6; background: #f9f9f9; }
+        .task-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .task-checkbox { width: 24px; height: 24px; cursor: pointer; }
+        .task-title { flex: 1; font-size: 18px; font-weight: 600; color: #333; }
+        .task-title.completed { text-decoration: line-through; }
+        .task-actions { display: flex; gap: 10px; }
         .btn-icon {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+            padding: 5px 10px; border: none; border-radius: 5px;
+            cursor: pointer; font-size: 14px; transition: all 0.3s;
         }
-
-        .btn-edit {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background: #45a049;
-        }
-
-        .btn-delete {
-            background: #ff4757;
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background: #ff3838;
-        }
-
-        .task-description {
-            color: #666;
-            margin-left: 39px;
-            margin-bottom: 8px;
-        }
-
+        .btn-edit { background: #3498db; color: white; }
+        .btn-edit:hover { background: #2980b9; }
+        .btn-delete { background: #ff4757; color: white; }
+        .btn-delete:hover { background: #ff3838; }
+        .task-description { color: #666; margin-left: 39px; margin-bottom: 8px; }
         .task-reminder {
-            display: inline-block;
-            margin-left: 39px;
-            padding: 5px 12px;
-            background: #fff3cd;
-            color: #856404;
-            border-radius: 5px;
-            font-size: 13px;
-            font-weight: 600;
+            display: inline-block; margin-left: 39px; padding: 5px 12px;
+            background: #fff3cd; color: #856404; border-radius: 5px;
+            font-size: 13px; font-weight: 600;
         }
-
-        .task-reminder.today {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .task-reminder.overdue {
-            background: #ff4757;
-            color: white;
-        }
-
-        .no-tasks {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-            font-size: 18px;
-        }
-
-        /* Modal Styles */
+        .task-reminder.today { background: #f8d7da; color: #721c24; }
+        .task-reminder.overdue { background: #ff4757; color: white; }
+        .no-tasks { text-align: center; padding: 40px; color: #999; font-size: 18px; }
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s;
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
         }
-
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
+        .modal.show { display: flex; }
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s;
+            background: white; padding: 30px; border-radius: 15px;
+            max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #333;
-        }
-
-        .close-btn {
-            font-size: 28px;
-            font-weight: bold;
-            color: #999;
-            cursor: pointer;
-            border: none;
-            background: none;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: #333;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-            flex: 1;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
+        .modal-header { margin-bottom: 20px; }
+        .modal-header h2 { color: #333; }
+        .modal-footer { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-footer .btn { flex: 1; }
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .task-header {
-                flex-wrap: wrap;
-            }
-
-            .task-actions {
-                width: 100%;
-                margin-left: 39px;
-            }
+            .header h1 { font-size: 2em; }
+            .task-header { flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -359,8 +116,8 @@
             <p>Stay organized with reminders & notifications</p>
         </div>
 
-        <div class="notification-prompt" id="notificationPrompt">
-            <span>🔔 Enable notifications to get reminders at scheduled times</span>
+        <div id="notificationBanner" class="notification-banner">
+            <span>🔔 Enable notifications to get reminded about your tasks!</span>
             <button onclick="requestNotificationPermission()">Enable</button>
         </div>
 
@@ -393,12 +150,10 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Edit Task</h2>
-                <button class="close-btn" onclick="closeEditModal()">&times;</button>
             </div>
             <form id="editForm">
                 <input type="hidden" id="editTaskId">
@@ -414,9 +169,9 @@
                     <label for="editReminder">Reminder Date & Time</label>
                     <input type="datetime-local" id="editReminder">
                 </div>
-                <div class="modal-buttons">
-                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
                 </div>
             </form>
         </div>
@@ -426,36 +181,26 @@
         let currentFilter = 'all';
         let notificationCheckInterval = null;
 
-        // Request notification permission on load
         document.addEventListener('DOMContentLoaded', () => {
             checkNotificationPermission();
             loadTasks();
             startNotificationChecker();
         });
 
-        // Check notification permission
         function checkNotificationPermission() {
-            if ('Notification' in window) {
-                if (Notification.permission === 'default') {
-                    document.getElementById('notificationPrompt').classList.add('show');
-                } else if (Notification.permission === 'granted') {
-                    console.log('Notifications enabled');
-                }
+            if ('Notification' in window && Notification.permission === 'default') {
+                document.getElementById('notificationBanner').classList.add('show');
             }
         }
 
-        // Request notification permission
         async function requestNotificationPermission() {
-            if ('Notification' in window) {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    document.getElementById('notificationPrompt').classList.remove('show');
-                    showNotification('Notifications Enabled!', 'You will receive reminders for your tasks');
-                }
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                document.getElementById('notificationBanner').classList.remove('show');
+                showNotification('Notifications Enabled!', 'You will receive reminders for your tasks');
             }
         }
 
-        // Show notification
         function showNotification(title, body, taskId = null) {
             if ('Notification' in window && Notification.permission === 'granted') {
                 const notification = new Notification(title, {
@@ -465,7 +210,6 @@
                     tag: taskId ? `task-${taskId}` : 'general',
                     requireInteraction: true
                 });
-
                 notification.onclick = function() {
                     window.focus();
                     notification.close();
@@ -473,14 +217,11 @@
             }
         }
 
-        // Start checking for reminders
         function startNotificationChecker() {
-            // Check every 30 seconds
             notificationCheckInterval = setInterval(checkReminders, 30000);
-            checkReminders(); // Check immediately
+            checkReminders();
         }
 
-        // Check for due reminders
         async function checkReminders() {
             const response = await fetch('/api/tasks');
             const tasks = await response.json();
@@ -491,67 +232,51 @@
                     const reminderDate = new Date(task.reminder_date);
                     const timeDiff = reminderDate - now;
 
-                    // Trigger if reminder time has passed or is within 1 minute
-                    if (timeDiff <= 60000 && timeDiff > -300000) { // Within 1 min or up to 5 min past
+                    if (timeDiff <= 60000 && timeDiff > -300000) {
                         showNotification('Task Reminder! 🔔', task.title, task.id);
-
-                        // Mark as notified
                         fetch(`/api/tasks/${task.id}/notified`, { method: 'POST' });
                     }
                 }
             });
         }
 
-        // Form submission - Add task
         document.getElementById('taskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const title = document.getElementById('title').value;
             const description = document.getElementById('description').value;
             const reminder = document.getElementById('reminder').value;
 
-            const task = {
-                title,
-                description,
-                reminder_date: reminder || null
-            };
-
             await fetch('/api/tasks', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(task)
+                body: JSON.stringify({
+                    title, description, reminder_date: reminder || null
+                })
             });
 
             document.getElementById('taskForm').reset();
             loadTasks();
         });
 
-        // Form submission - Edit task
         document.getElementById('editForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const taskId = document.getElementById('editTaskId').value;
             const title = document.getElementById('editTitle').value;
             const description = document.getElementById('editDescription').value;
             const reminder = document.getElementById('editReminder').value;
 
-            const task = {
-                title,
-                description,
-                reminder_date: reminder || null
-            };
-
             await fetch(`/api/tasks/${taskId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(task)
+                body: JSON.stringify({
+                    title, description, reminder_date: reminder || null
+                })
             });
 
             closeEditModal();
             loadTasks();
         });
 
-        // Filter tabs
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -561,7 +286,6 @@
             });
         });
 
-        // Load and display tasks
         async function loadTasks() {
             const response = await fetch('/api/tasks');
             const tasks = await response.json();
@@ -594,18 +318,8 @@
                     const isToday = reminderDate.toDateString() === today;
                     const isPast = reminderDate < now && !task.completed;
 
-                    let reminderClass = '';
-                    let reminderText = '';
-
-                    if (isPast) {
-                        reminderClass = 'overdue';
-                        reminderText = '⚠️ Overdue: ';
-                    } else if (isToday) {
-                        reminderClass = 'today';
-                        reminderText = '🔔 Today: ';
-                    } else {
-                        reminderText = '🔔 ';
-                    }
+                    let reminderClass = isPast ? 'overdue' : (isToday ? 'today' : '');
+                    let reminderText = isPast ? '⚠️ Overdue: ' : (isToday ? '🔔 Today: ' : '🔔 ');
 
                     reminderHTML = `<div class="task-reminder ${reminderClass}">
                         ${reminderText}${reminderDate.toLocaleString()}
@@ -637,7 +351,6 @@
             }).join('');
         }
 
-        // Open edit modal
         async function openEditModal(taskId) {
             const response = await fetch('/api/tasks');
             const tasks = await response.json();
@@ -649,7 +362,6 @@
                 document.getElementById('editDescription').value = task.description || '';
 
                 if (task.reminder_date) {
-                    // Convert to local datetime format
                     const date = new Date(task.reminder_date);
                     const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
                         .toISOString().slice(0, 16);
@@ -662,13 +374,11 @@
             }
         }
 
-        // Close edit modal
         function closeEditModal() {
             document.getElementById('editModal').classList.remove('show');
             document.getElementById('editForm').reset();
         }
 
-        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('editModal');
             if (event.target === modal) {

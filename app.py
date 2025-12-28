@@ -56,7 +56,7 @@ class ToDoApp:
                 task['title'] = title
                 task['description'] = description
                 task['reminder_date'] = reminder_date
-                task['notified'] = False  # Reset notification flag when reminder changes
+                task['notified'] = False
                 self.save_tasks()
                 return task
         return None
