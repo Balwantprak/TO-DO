@@ -65,68 +65,6 @@ http://localhost:5000
 
 6. **Allow browser notifications** when prompted to receive reminders
 
-## Deployment
-
-### Deploy to Heroku
-
-1. Install the Heroku CLI and login:
-```bash
-heroku login
-```
-
-2. Create and deploy:
-```bash
-heroku create your-todo-app-name
-git init
-git add .
-git commit -m "Initial commit"
-git push heroku main
-heroku open
-```
-
-### Deploy to Railway
-
-1. Visit [Railway.app](https://railway.app)
-2. Click "Start a New Project"
-3. Select "Deploy from GitHub repo"
-4. Railway will auto-detect Flask and deploy
-
-### Deploy to Render
-
-1. Visit [Render.com](https://render.com)
-2. Click "New +" → "Web Service"
-3. Connect your GitHub repository
-4. Configure:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
-5. Click "Create Web Service"
-
-## Project Structure
-
-```
-todo-app/
-│
-├── app.py              # Flask backend with REST API
-├── templates/
-│   └── index.html      # Frontend UI with edit & notifications
-├── tasks.json          # Data storage (created automatically)
-├── requirements.txt    # Python dependencies
-├── Procfile           # Heroku configuration
-├── runtime.txt        # Python version specification
-├── .gitignore         # Git ignore rules
-└── README.md          # This file
-```
-
-## API Endpoints
-
-- `GET /` - Serve the main application
-- `GET /api/tasks` - Get all tasks
-- `POST /api/tasks` - Create a new task
-- `PUT /api/tasks/<id>` - **Update a task**
-- `POST /api/tasks/<id>/toggle` - Toggle task completion
-- `POST /api/tasks/<id>/notified` - **Mark task as notified**
-- `DELETE /api/tasks/<id>` - Delete a task
-
 ## Technologies Used
 
 - **Backend**: Flask (Python)
@@ -158,7 +96,7 @@ todo-app/
 - Safari: Full support (macOS/iOS)
 - Opera: Full support
 
-**Note**: Notifications require HTTPS in production (works on localhost for development)
+**Note**: Notifications require HTTPS in production
 
 ## Future Enhancements
 
